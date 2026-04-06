@@ -1,0 +1,5 @@
+{
+  "name": "World Explorer",
+  "description": "A website to view and search countries using the REST Countries API.",
+  "requestFramePermissions": []
+}
