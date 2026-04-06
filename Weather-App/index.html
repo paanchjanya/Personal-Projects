@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seasonal Weather Desk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="ambient-orb ambient-orb-left"></div>
+      <div class="ambient-orb ambient-orb-right"></div>
+
+      <header class="hero panel">
+        <div class="eyebrow">Live weather, gently explained</div>
+        <h1>Tell me a city, and I will turn today's weather into something practical.</h1>
+        <p class="hero-copy">
+          A minimal dashboard with real-time temperature in Celsius and Fahrenheit, a weather-aware
+          theme, seasonal timing, and useful precautions for the place you choose.
+        </p>
+      </header>
+
+      <main class="dashboard">
+        <section class="panel search-panel">
+          <div class="section-head">
+            <span class="section-kicker">Search</span>
+            <h2>Check a city</h2>
+          </div>
+
+          <form id="weather-form" class="weather-form" novalidate>
+            <label class="field">
+              <span class="field-label">City name</span>
+              <input
+                id="city-input"
+                name="city"
+                type="text"
+                autocomplete="off"
+                placeholder="Try Bengaluru"
+                aria-describedby="form-helper"
+              />
+            </label>
+
+            <label class="field">
+              <span class="field-label">Country</span>
+              <select id="country-select" name="country" aria-label="Select country"></select>
+            </label>
+
+            <button id="submit-button" class="primary-button" type="submit">Get weather</button>
+          </form>
+
+          <p id="form-helper" class="helper-copy">
+            India is selected by default. Pick any listed country, then enter the city to see the
+            live weather, seasonal structure, and care advice.
+          </p>
+          <p id="status-message" class="status-message" role="status" aria-live="polite">
+            Loading countries...
+          </p>
+        </section>
+
+        <section id="empty-state" class="panel empty-state">
+          <div class="section-head">
+            <span class="section-kicker">Welcome</span>
+            <h2>A calm place to start</h2>
+          </div>
+          <p>
+            Enter a city and country to get the current temperature, a practical weather summary,
+            seasonal timing, and precautions for the full year.
+          </p>
+        </section>
+
+        <section id="results-panel" class="results-grid" hidden>
+          <article class="panel current-panel reveal">
+            <div class="current-panel-copy">
+              <div class="section-head">
+                <span class="section-kicker">Current weather</span>
+                <h2 id="location-title">Location</h2>
+              </div>
+              <p id="welcome-line" class="welcome-line"></p>
+              <p id="condition-text" class="condition-text"></p>
+              <p id="updated-text" class="updated-text"></p>
+            </div>
+
+            <div class="temperature-cluster">
+              <div class="temperature-card">
+                <span class="temp-label">Celsius</span>
+                <div class="temp-reading">
+                  <span id="temp-c">--</span>
+                  <span class="temp-unit">&deg;C</span>
+                </div>
+              </div>
+              <div class="temperature-card">
+                <span class="temp-label">Fahrenheit</span>
+                <div class="temp-reading">
+                  <span id="temp-f">--</span>
+                  <span class="temp-unit">&deg;F</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel metrics-panel reveal">
+            <div class="section-head">
+              <span class="section-kicker">Right now</span>
+              <h2>Current situation</h2>
+            </div>
+
+            <div id="metrics-grid" class="metrics-grid"></div>
+            <div class="narrative-stack">
+              <p id="situation-summary" class="narrative-copy"></p>
+              <p id="advisory-summary" class="narrative-copy secondary"></p>
+            </div>
+          </article>
+
+          <article class="panel seasons-panel reveal">
+            <div class="section-head">
+              <span class="section-kicker">Season map</span>
+              <h2>Seasonal structure</h2>
+            </div>
+            <p id="season-intro" class="section-copy"></p>
+            <div id="season-grid" class="season-grid"></div>
+          </article>
+
+          <article class="panel precautions-panel reveal">
+            <div class="section-head">
+              <span class="section-kicker">Practical care</span>
+              <h2>Precautions for all seasons</h2>
+            </div>
+            <p class="section-copy">
+              Small adjustments are often enough. Use these season-by-season reminders as your
+              quick checklist.
+            </p>
+            <div id="precautions-grid" class="precautions-grid"></div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="./countries.js" defer></script>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
