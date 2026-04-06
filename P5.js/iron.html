@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Vista Hotel & Restaurant Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+            padding: 32px 40px 40px 40px;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        form {
+            margin-bottom: 24px;
+        }
+        input, select, button {
+            margin: 6px 8px 6px 0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+        button {
+            background: #38a169;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #2f855a;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 32px;
+        }
+        th, td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        th {
+            background: #f1f5f9;
+        }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.95em;
+            color: #fff;
+        }
+        .status-available { background: #38a169; }
+        .status-occupied { background: #e53e3e; }
+        .status-confirmed { background: #3182ce; }
+        .status-pending { background: #d69e2e; }
+        .btn {
+            background: #4299e1;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .btn:hover {
+            background: #2b6cb0;
+        }
+        .floating-action {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: #38a169;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            font-size: 2em;
+            box-shadow: 0 6px 24px rgba(56,161,105,0.18);
+            cursor: pointer;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Room Management</h2>
+        <form onsubmit="addRoom(); return false;">
+            <input id="roomNumber" placeholder="Room Number">
+            <input id="roomType" placeholder="Room Type">
+            <input id="roomPrice" placeholder="Room Price">
+            <select id="roomStatus">
+                <option>Available</option>
+                <option>Occupied</option>
+            </select>
+            <button type="submit">Add Room</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="roomsTableBody"></tbody>
+        </table>
+
+        <h2>Reservation Management</h2>
+        <form onsubmit="addReservation(); return false;">
+            <input id="guestName" placeholder="Guest Name">
+            <input id="guestEmail" placeholder="Guest Email">
+            <input id="guestPhone" placeholder="Guest Phone">
+            <input id="checkIn" type="date" placeholder="Check-In">
+            <input id="checkOut" type="date" placeholder="Check-Out">
+            <input id="reservationRoom" placeholder="Room Number">
+            <button type="submit">Add Reservation</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Guest</th>
+                    <th>Room</th>
+                    <th>Check-In</th>
+                    <th>Check-Out</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="reservationsTableBody"></tbody>
+        </table>
+
+        <h2>Restaurant Orders</h2>
+        <form onsubmit="addOrder(); return false;">
+            <input id="tableNumber" placeholder="Table Number">
+            <input id="tableCapacity" placeholder="Table Capacity">
+            <input id="customerName" placeholder="Customer Name">
+            <input id="orderItems" placeholder="Order Items">
+            <input id="orderTotal" placeholder="Order Total">
+            <select id="orderStatus">
+                <option>Pending</option>
+                <option>Completed</option>
+            </select>
+            <button type="submit">Add Order</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Table</th>
+                    <th>Customer</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="ordersTableBody"></tbody>
+        </table>
+
+        <h2>Menu Management</h2>
+        <form onsubmit="addMenuItem(); return false;">
+            <input id="itemName" placeholder="Item Name">
+            <input id="itemCategory" placeholder="Category">
+            <input id="itemPrice" placeholder="Price">
+            <input id="itemDescription" placeholder="Description">
+            <select id="itemAvailability">
+                <option>Available</option>
+                <option>Out of Stock</option>
+            </select>
+            <button type="submit">Add Menu Item</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Availability</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="menuTableBody"></tbody>
+        </table>
+
+        <h2>Staff Management</h2>
+        <form onsubmit="addStaff(); return false;">
+            <input id="staffName" placeholder="Staff Name">
+            <input id="staffRole" placeholder="Role">
+            <input id="staffEmail" placeholder="Email">
+            <input id="staffPhone" placeholder="Phone">
+            <select id="staffShift">
+                <option>Morning</option>
+                <option>Evening</option>
+                <option>Night</option>
+            </select>
+            <input id="staffSalary" placeholder="Salary">
+            <button type="submit">Add Staff</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Shift</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="staffTableBody"></tbody>
+        </table>
+    </div>
+
+    <button class="floating-action" onclick="showNotification()" title="Quick Actions">⚡</button>
+
+    <script>
+        // Tab switching functionality (not used in this simple version)
+        function showTab(tabName) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Room management functions
+        function addRoom() {
+            const roomNumber = document.getElementById('roomNumber').value;
+            const roomType = document.getElementById('roomType').value;
+            const roomPrice = document.getElementById('roomPrice').value;
+            const roomStatus = document.getElementById('roomStatus').value;
+            if (roomNumber && roomType && roomPrice && roomStatus) {
+                const tableBody = document.getElementById('roomsTableBody');
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${roomNumber}</td>
+                    <td>${roomType}</td>
+                    <td>$${roomPrice}</td>
+                    <td><span class="status-badge status-${roomStatus.toLowerCase()}">${roomStatus}</span></td>
+                    <td><button class="btn" onclick="editRoom('${roomNumber}')">Edit</button></td>
+                `;
+                document.getElementById('roomNumber').value = '';
+                document.getElementById('roomType').value = '';
+                document.getElementById('roomPrice').value = '';
+                document.getElementById('roomStatus').value = 'Available';
+                showNotification('Room added successfully!');
+            } else {
+                alert('Please fill in all fields');
+            }
+        }
+        function updateRoom() {
+            showNotification('Room updated successfully!');
+        }
+        function deleteRoom() {
+            if (confirm('Are you sure you want to delete this room?')) {
+                showNotification('Room deleted successfully!');
+            }
+        }
+        function editRoom(roomNumber) {
+            showNotification(`Editing room ${roomNumber}`);
+        }
+
+        // Reservation management functions
+        function addReservation() {
+            const guestName = document.getElementById('guestName').value;
+            const guestEmail = document.getElementById('guestEmail').value;
+            const checkIn = document.getElementById('checkIn').value;
+            const checkOut = document.getElementById('checkOut').value;
+            const reservationRoom = document.getElementById('reservationRoom').value;
+            if (guestName && guestEmail && checkIn && checkOut && reservationRoom) {
+                const tableBody = document.getElementById('reservationsTableBody');
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${guestName}</td>
+                    <td>${reservationRoom}</td>
+                    <td>${checkIn}</td>
+                    <td>${checkOut}</td>
+                    <td><span class="status-badge status-confirmed">Confirmed</span></td>
+                    <td><button class="btn" onclick="editReservation('${guestName}')">Edit</button></td>
+                `;
+                document.getElementById('guestName').value = '';
+                document.getElementById('guestEmail').value = '';
+                document.getElementById('guestPhone').value = '';
+                document.getElementById('checkIn').value = '';
+                document.getElementById('checkOut').value = '';
+                document.getElementById('reservationRoom').value = '';
+                showNotification('Reservation added successfully!');
+            } else {
+                alert('Please fill in all required fields');
+            }
+        }
+        function updateReservation() {
+            showNotification('Reservation updated successfully!');
+        }
+        function cancelReservation() {
+            if (confirm('Are you sure you want to cancel this reservation?')) {
+                showNotification('Reservation cancelled successfully!');
+            }
+        }
+        function editReservation(id) {
+            showNotification(`Editing reservation for ${id}`);
+        }
+
+        // Restaurant management functions
+        function addOrder() {
+            const tableNumber = document.getElementById('tableNumber').value;
+            const tableCapacity = document.getElementById('tableCapacity').value;
+            const customerName = document.getElementById('customerName').value;
+            const orderItems = document.getElementById('orderItems').value;
+            const orderTotal = document.getElementById('orderTotal').value;
+            const orderStatus = document.getElementById('orderStatus').value;
+            if (tableNumber && customerName && orderItems && orderTotal && orderStatus) {
+                const tableBody = document.getElementById('ordersTableBody');
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>Table ${tableNumber}</td>
+                    <td>${customerName}</td>
+                    <td>${orderItems}</td>
+                    <td>$${orderTotal}</td>
+                    <td><span class="status-badge status-available">${orderStatus}</span></td>
+                    <td><button class="btn" onclick="editOrder('${tableNumber}')">Edit</button></td>
+                `;
+                document.getElementById('tableNumber').value = '';
+                document.getElementById('tableCapacity').value = '';
+                document.getElementById('customerName').value = '';
+                document.getElementById('orderItems').value = '';
+                document.getElementById('orderTotal').value = '';
+                document.getElementById('orderStatus').value = 'Pending';
+                showNotification('Order added successfully!');
+            } else {
+                alert('Please fill in all fields');
+            }
+        }
+        function updateOrder() {
+            showNotification('Order updated successfully!');
+        }
+        function deleteOrder() {
+            if (confirm('Are you sure you want to delete this order?')) {
+                showNotification('Order deleted successfully!');
+            }
+        }
+        function editOrder(tableNumber) {
+            showNotification(`Editing order for Table ${tableNumber}`);
+        }
+
+        // Menu management functions
+        function addMenuItem() {
+            const itemName = document.getElementById('itemName').value;
+            const itemCategory = document.getElementById('itemCategory').value;
+            const itemPrice = document.getElementById('itemPrice').value;
+            const itemDescription = document.getElementById('itemDescription').value;
+            const itemAvailability = document.getElementById('itemAvailability').value;
+            if (itemName && itemCategory && itemPrice && itemAvailability) {
+                const tableBody = document.getElementById('menuTableBody');
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${itemName}</td>
+                    <td>${itemCategory}</td>
+                    <td>$${itemPrice}</td>
+                    <td><span class="status-badge status-${itemAvailability.toLowerCase().replace(/ /g, '-')}">${itemAvailability}</span></td>
+                    <td><button class="btn" onclick="editMenuItem('${itemName}')">Edit</button></td>
+                `;
+                document.getElementById('itemName').value = '';
+                document.getElementById('itemCategory').value = '';
+                document.getElementById('itemPrice').value = '';
+                document.getElementById('itemDescription').value = '';
+                document.getElementById('itemAvailability').value = 'Available';
+                showNotification('Menu item added successfully!');
+            } else {
+                alert('Please fill in all fields');
+            }
+        }
+        function updateMenuItem() {
+            showNotification('Menu item updated successfully!');
+        }
+        function deleteMenuItem() {
+            if (confirm('Are you sure you want to delete this menu item?')) {
+                showNotification('Menu item deleted successfully!');
+            }
+        }
+        function editMenuItem(itemName) {
+            showNotification(`Editing menu item: ${itemName}`);
+        }
+
+        // Staff management functions
+        function addStaff() {
+            const staffName = document.getElementById('staffName').value;
+            const staffRole = document.getElementById('staffRole').value;
+            const staffEmail = document.getElementById('staffEmail').value;
+            const staffPhone = document.getElementById('staffPhone').value;
+            const staffShift = document.getElementById('staffShift').value;
+            const staffSalary = document.getElementById('staffSalary').value;
+            if (staffName && staffRole && staffEmail && staffPhone && staffShift && staffSalary) {
+                const tableBody = document.getElementById('staffTableBody');
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${staffName}</td>
+                    <td>${staffRole}</td>
+                    <td>${staffEmail}</td>
+                    <td>${staffPhone}</td>
+                    <td>${staffShift}</td>
+                    <td><button class="btn" onclick="editStaff('${staffName}')">Edit</button></td>
+                `;
+                document.getElementById('staffName').value = '';
+                document.getElementById('staffRole').value = '';
+                document.getElementById('staffEmail').value = '';
+                document.getElementById('staffPhone').value = '';
+                document.getElementById('staffShift').value = 'Morning';
+                document.getElementById('staffSalary').value = '';
+                showNotification('Staff added successfully!');
+            } else {
+                alert('Please fill in all fields');
+            }
+        }
+        function updateStaff() {
+            showNotification('Staff updated successfully!');
+        }
+        function deleteStaff() {
+            if (confirm('Are you sure you want to delete this staff member?')) {
+                showNotification('Staff deleted successfully!');
+            }
+        }
+        function editStaff(staffName) {
+            showNotification(`Editing staff: ${staffName}`);
+        }
+
+        // Notification function
+        function showNotification(message = 'Action completed!') {
+            let notification = document.getElementById('notification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'notification';
+                notification.style.position = 'fixed';
+                notification.style.bottom = '40px';
+                notification.style.right = '40px';
+                notification.style.background = 'linear-gradient(135deg, #48bb78, #38a169)';
+                notification.style.color = 'white';
+                notification.style.padding = '18px 32px';
+                notification.style.borderRadius = '30px';
+                notification.style.fontSize = '1.2em';
+                notification.style.boxShadow = '0 10px 25px rgba(0,0,0,0.15)';
+                notification.style.zIndex = 9999;
+                notification.style.opacity = 0;
+                notification.style.transition = 'opacity 0.3s';
+                document.body.appendChild(notification);
+            }
+            notification.textContent = message;
+            notification.style.opacity = 1;
+            setTimeout(() => {
+                notification.style.opacity = 0;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
